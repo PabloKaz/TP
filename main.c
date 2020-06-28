@@ -26,10 +26,11 @@ void cargarMasCompArch(stComponente a[]);
 stComponente cargarUnaComp();
 void mostrarMenu();
 void guardaUnCliente(stComponente a);
-void cargarVariosClientesar();
+int cargarVariosClientesar();
 void mostrarUnComp (stComponente a);
 void mostrarArchivo ();
 void mostrarUnArreglo (stComponente a[], int v);
+void mostrarPerdidas();
 
 
 int main()
@@ -70,7 +71,12 @@ int main()
         mostrarUnArreglo(Doll,vDoll);
         break;
         case 'e':
-        cargarVariasPerdidas()
+        cargarVariasPerdidas(Biblia,vBiblia);
+        cargarVariasPerdidas(CdV,vCdV);
+        cargarVariasPerdidas(Doll,vDoll);
+        break;
+        case 'f':
+        mostrarPerdidas();
         break;
         }
     system("pause");
@@ -82,10 +88,14 @@ int main()
 
 void mostrarMenu()
 {
+
     printf("Cargar Componentes (a)\n");
     printf("Mostrar Componentes (b)\n");
     printf("Pasar todo a arreglos (c)\n");
     printf("Mostrar todos los arreglos (d)\n");
+    printf("Cargar todas las perdidas (e)\n");
+    printf("Mostrar las perdidas (f)\n");
+
 }
 
 
@@ -231,7 +241,7 @@ void guardaUnCliente(stComponente a)
 
 }
 
-void cargarVariosClientesar()
+int cargarVariosClientesar()
 {
 
     int i =0;
@@ -245,6 +255,7 @@ void cargarVariosClientesar()
           system("cls");
           i++;
         }
+   return i;
 
 }
 
@@ -266,13 +277,13 @@ void cargarPerdida(stComponente a)
     if (archPerdidas)
     {
        if(a.falla >= FALLAS_MAX){
-        fwrite(&a.costo,sizeof(float),1,archPerdidas);
         a.usado = 1;
+        fwrite(&a.costo,sizeof(a.costo),1,archPerdidas);
        }
-
 
        fclose(archPerdidas);
     }
+
 }
 
 void mostrarUnArreglo (stComponente a[], int v)
@@ -286,3 +297,15 @@ void mostrarUnArreglo (stComponente a[], int v)
 
 }
 
+void mostrarPerdidas ()
+{
+
+    float a;
+    FILE *archPerdidas = fopen("Perdidas.bin","rb");
+    if (archPerdidas){
+        while (fread(&a,sizeof(float),1,archPerdidas)>0){
+            printf("[%.2f]-", a);
+        }
+        fclose(archPerdidas);
+    }
+}
